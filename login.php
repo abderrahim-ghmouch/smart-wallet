@@ -1,3 +1,11 @@
+<?php
+    session_start();
+    if(isset($_SESSION["user_id"])){
+        header("Location: index.php");
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,9 +41,14 @@
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form method="POST" action="#">
+            <form method="POST" action="/auth/login.php">
                 <div>
-
+                <p class="text-red-500 text-center py-5">
+                    <?php
+                        echo $_SESSION["error"] ?? "";
+                        unset($_SESSION["error"]);
+                    ?>
+                </p>
                 <div class="mt-6">
                     <label for="email" class="block text-sm font-medium leading-5 text-gray-700">
                         Email address

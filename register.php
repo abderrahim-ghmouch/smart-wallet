@@ -1,3 +1,11 @@
+<?php
+    session_start();
+    if(isset($_SESSION["user_id"])){
+        header("Location: index.php");
+        exit();
+    }
+?>
+
 <!doctype html>
 <html>
   <head>
@@ -22,7 +30,7 @@
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form method="POST" action="#">
+            <form method="POST" action="/auth/register.php">
                 <div>
                 <div class="mt-6">
                     <label for="username" class="block text-sm font-medium leading-5 text-gray-700">Username</label>
