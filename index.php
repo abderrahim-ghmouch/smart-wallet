@@ -61,7 +61,7 @@ $balance = $total_Income - $total_Expenses;
                     </li>
                     
                     <li>
-                        <a href="#" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
+                        <a href="/auth/logout.php" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
                             <i class="fas fa-file-export w-5"></i>
                             <span>log out</span>
                         </a>
