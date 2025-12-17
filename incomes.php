@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if(!isset($_SESSION["user_id"])){
+    header("Location: login.php");
+    exit();
+}
+
 include_once __DIR__ . "/database.php";
 
 $stmt = $db->query("select * from incomes", PDO::FETCH_ASSOC);
