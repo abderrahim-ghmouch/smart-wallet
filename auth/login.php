@@ -17,7 +17,7 @@ try {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         if (password_verify($password, $user["password"])) {
             $_SESSION["user_id"] = $user["id"];
-            header("location: /verify.php");
+            header("location: /index.php");
             exit();
         } else {
             $_SESSION["error"] = "Invalid";

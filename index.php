@@ -34,7 +34,7 @@ $balance = $total_Income - $total_Expenses;
                     <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
                         <i class="fas fa-chart-line text-white text-xl"></i>
                     </div>
-                    <h1 class="text-2xl font-bold text-gray-800">FinTrack</h1>
+                    <h1 class="text-2xl font-bold text-gray-800">Smart Wallet</h1>
                 </div>
                 <p class="text-gray-500 text-sm mt-1">Personal Finance Manager</p>
             </div>
@@ -59,6 +59,12 @@ $balance = $total_Income - $total_Expenses;
                             <span>Expenses</span>
                         </a>
                     </li>
+                     <li>
+                        <a href="cards.php" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
+                        <i class="fas fa-credit-card w-5"></i>
+                            <span>my Card</span>
+                        </a>
+                    </li>
                     
                     <li>
                         <a href="/auth/logout.php" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
@@ -79,6 +85,11 @@ $balance = $total_Income - $total_Expenses;
                         <h2 class="text-2xl font-bold text-gray-800">Dashboard Overview</h2>
                         <p class="text-gray-600">Welcome back! Here's your financial summary</p>
                     </div>
+                       <button id="addIncomeBtn"
+                        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2">
+                        <i class="fas fa-plus"></i>
+                        <span>Add card</span>
+                    </button>
                 </div>
             </header>
 

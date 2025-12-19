@@ -80,6 +80,13 @@ $avreage = $sum / 12;
                             <span>Expenses</span>
                         </a>
                     </li>
+                        <li>
+                        <a href="cards.php" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
+                        <i class="fas fa-credit-card w-5"></i>
+                            <span>my Card</span>
+                        </a>
+                    </li>
+                    
 
                 <li>
                         <a href="/auth/logout.php" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
