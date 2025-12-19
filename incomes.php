@@ -2,19 +2,24 @@
 session_start();
 
 if(!isset($_SESSION["user_id"])){
-    header("Location: login.php");
+    header("Location: /login.php");
     exit();
 }
 
 include_once __DIR__ . "/database.php";
 
-$stmt = $db->query("select * from incomes", PDO::FETCH_ASSOC);
+include "totalIncome.php";
+
+$stmt = $db->prepare("select * from incomes where card_id = ?");
+$stmt->execute([$_SESSION["card_id"]]);
 $incomes = $stmt->fetchAll();
 
-include "totalIncome.php";
-$stmt = $db->query("Select round(sum(amount), 2) as total from incomes where MONTH(date_income) = Month(Now());", PDO::FETCH_ASSOC);
+
+$stmt = $db->prepare("Select round(sum(amount), 2) as total from incomes where MONTH(date_income) = Month(Now()) and card_id = ?;");
+$stmt->execute([$_SESSION["card_id"]]);
 $this_Month = $stmt->fetchColumn(0);
-$stmt = $db->query("Select round(sum(amount), 2) as total from incomes where YEAR(date_income) = YEAR(Now()) group by MONTH(date_income);", PDO::FETCH_ASSOC);
+$stmt = $db->prepare("Select round(sum(amount), 2) as total from incomes where YEAR(date_income) = YEAR(Now()) group by MONTH(date_income) and card_id = ?;");
+$stmt->execute([$_SESSION["card_id"]]);
 $all_Month = $stmt->fetchAll();
 
 $sum = 0;
@@ -80,16 +85,18 @@ $avreage = $sum / 12;
                             <span>Expenses</span>
                         </a>
                     </li>
-                        <li>
-                        <a href="cards.php" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
-                        <i class="fas fa-credit-card w-5"></i>
+                    <li>
+                        <a href="cards.php"
+                            class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
+                            <i class="fas fa-credit-card w-5"></i>
                             <span>my Card</span>
                         </a>
                     </li>
-                    
 
-                <li>
-                        <a href="/auth/logout.php" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
+
+                    <li>
+                        <a href="/auth/logout.php"
+                            class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
                             <i class="fas fa-file-export w-5"></i>
                             <span>log out</span>
                         </a>
@@ -199,7 +206,7 @@ $avreage = $sum / 12;
                                 </tr>
                             </thead>
                             <tbody id="incomesTableBody">
-                              
+
                                 <?php
                                 if (count($incomes) > 0) {
                                     foreach ($incomes as $income) {
@@ -210,12 +217,12 @@ $avreage = $sum / 12;
                                                         <td>{$income['amount']}</td>
                                                         <td>{$income['date_income']}</td>
                                                         <td class='flex gap-2'>
-                                                 <button class='updBtn'>update</button> 
-                                                 <form id='deletFom' method=\"post\" action=\"crud_incomes/delIcome.php\">
-                                                 <input type=\"hidden\" name=\"id\" value=\"{$income["id"]}\" />
-                                                 <button id='deleteButton'> delete</button>
-                                                 </form>
-                                                      </td>
+                                                <button class='updBtn'>update</button> 
+                                                <form id='deletFom' method=\"post\" action=\"crud_incomes/delIcome.php\">
+                                                <input type=\"hidden\" name=\"id\" value=\"{$income["id"]}\" />
+                                                <button id='deleteButton'> delete</button>
+                                                </form>
+                                                    </td>
                                                     </tr>
                                                 ";
                                     }
@@ -269,7 +276,7 @@ $avreage = $sum / 12;
                         <option value="salary">salary</option>
                         <option value="buisness">buisness</option>
                         <option value="transfert">transfert</option>
-                      
+
                     </select>
                     <div id="categoryError" class="text-red-500 text-sm mt-1">Category is required</div>
                 </div>
@@ -329,12 +336,12 @@ $avreage = $sum / 12;
                     <label class="block text-gray-700 mb-2">Category *</label>
                     <select id="category" required name="destination"
                         class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Select Category</option>
+                        <option value="">Select Category</option>
                         <option value="freelance">freelance</option>
                         <option value="salary">salary</option>
                         <option value="buisness">buisness</option>
                         <option value="transfert">transfert</option>
-                      
+
                     </select>
                     <div id="categoryError" class="text-red-500 text-sm mt-1">Category is required</div>
                 </div>

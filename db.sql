@@ -16,3 +16,11 @@ CREATE TABLE expenses(
     destination enum('shoping','food','bills','transport','trips')NOT NULL,
     description TEXT NOT NULL
 );
+
+create table cards(
+	ID int primary key AUTO_increment,
+	bank enum('CIH Bank','BMCE','Bank Populaire','Credit Maroc'),
+	card_number VARCHAR(16) unique NOT NULL,
+	user_id int NOT NULL,
+	foreign key(user_id) references users(id) ON DELETE cascade
+)
