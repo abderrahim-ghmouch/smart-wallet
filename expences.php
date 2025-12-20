@@ -9,21 +9,14 @@ if(!isset($_SESSION["user_id"])){
 include_once __DIR__ . "/database.php";
 include "totalExpences.php";
 
-$statement = $db->query("SELECT * FROM expenses");
-$expenses = $statement->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $db->prepare("SELECT * FROM expenses where card_id= ?");
+
+$stmt->execute([$_SESSION["card_id"]]);
+$expenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-$monthlyExpenses = 0;
-$currentMonth = date("Y-m");
-
-foreach ($expenses as $expense) {
- $total_Expenses += $expense['amount'];
-    if (substr($expense['date_expense'], 0, 7) === $currentMonth) {
-        $monthlyExpenses += $expense['amount'];
-    }
-}
-
-$stmt = $db->query("SELECT ROUND(SUM(amount), 2) as total FROM expenses WHERE YEAR(date_expense) = YEAR(NOW()) GROUP BY MONTH(date_expense)");
+$stmt = $db->prepare("SELECT ROUND(SUM(amount), 2) as total FROM expenses WHERE YEAR(date_expense) = YEAR(NOW()) AND card_id = ? GROUP BY MONTH(date_expense)");
+$stmt->execute([$_SESSION["card_id"]]);
 $monthlySums = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $sum = 0;
@@ -78,13 +71,7 @@ $averageExpenses = count($monthlySums) > 0 ? $sum / count($monthlySums) : 0;
                         <span>Expenses</span>
                     </a>
                 </li>
-                    <li>
-                        <a href="cards.php" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
-                        <i class="fas fa-credit-card w-5"></i>
-                            <span>my Card</span>
-                        </a>
-                    </li>
-                    
+                
             <li>
                         <a href="/auth/logout.php" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-500">
                             <i class="fas fa-file-export w-5"></i>
@@ -128,7 +115,12 @@ $averageExpenses = count($monthlySums) > 0 ? $sum / count($monthlySums) : 0;
                 </div>
             </div>
 
-           
+            <?php 
+                if(isset($_SESSION["error"])){
+                    echo $_SESSION["error"];
+                    unset($_SESSION["error"]);
+                }
+            ?>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full">
