@@ -22,6 +22,7 @@ $stmt = $db->prepare("Select round(sum(amount), 2) as total from incomes where Y
 $stmt->execute([$_SESSION["card_id"]]);
 $all_Month = $stmt->fetchAll();
 
+
 $sum = 0;
 
 foreach ($all_Month as $element) {
