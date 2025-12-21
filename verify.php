@@ -1,31 +1,24 @@
-<?php 
-
+<?php
 session_start();
-
-
-
-$otp= random_int(10000,99999);
-
-
-$_SESSION["otp"] = $otp;
-
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
-//Load Composer's autoloader (created by composer, not included with PHPMailer)
 require 'vendor/autoload.php';
 
-//Create an instance; passing true enables exceptions
-$mail = new PHPMailer(true);
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-  try {
+
+if (!isset($_SESSION["otp"])) {
+
+    $otp = random_int(10000, 99999);
+    $otp;
+
+    $mail = new PHPMailer(true);
+
+    try {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = "abderrahimghmouch47@gmail.com";
-        $mail->Password = "neie yupe szud vjim";
+        $mail->Password = "neie yupe szud vjim"; // 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
@@ -35,22 +28,28 @@ $mail = new PHPMailer(true);
         $mail->isHTML(true);
         $mail->Subject = 'Your OTP Code';
         $mail->Body = "<h2>Your OTP is: <b>$otp</b></h2>";
-        $mail->SMTPOptions = [
-    'ssl' => [
-        'verify_peer' => false,
-        'verify_peer_name' => false,
-        'allow_self_signed' => true,
-    ],
-];
 
         $mail->send();
     } catch (Exception $e) {
         echo $mail->ErrorInfo;
-    } 
+        exit;
+    }
+}
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
+    $otpsent = $_POST["validotp"] ?? '';
 
-?> 
+    if ($otpsent == $otp) {
+        unset($_SESSION["otp"]); // destroy OTP
+        header("Location: index.php");
+        exit();
+    } else {
+        $error = "Invalid code";
+    }
+}
+?>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8">
