@@ -17,20 +17,20 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader (created by composer, not included with PHPMailer)
 require 'vendor/autoload.php';
 
-//Create an instance; passing `true` enables exceptions
+//Create an instance; passing true enables exceptions
 $mail = new PHPMailer(true);
 
   try {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = "";
-        $mail->Password = "";
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Username = "abderrahimghmouch47@gmail.com";
+        $mail->Password = "neie yupe szud vjim";
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
-        $mail->setFrom("", 'OTP System');
-        $mail->addAddress("");
+        $mail->setFrom("abderrahimghmouch47@gmail.com", 'OTP System');
+        $mail->addAddress($_SESSION["email"]);
 
         $mail->isHTML(true);
         $mail->Subject = 'Your OTP Code';
@@ -48,19 +48,7 @@ $mail = new PHPMailer(true);
         echo $mail->ErrorInfo;
     } 
 
-$otprecive=$_POST["validotp"];
 
-
-if(isset($_SESSION["otp"]) && $otprecive==$_SESSION["otp"] ){
-  
-  header("location:index.php");
-
-  exit();
-}
-
-else{
-  echo "invalid code"; 
-};
 
 ?> 
 <html lang="en">
@@ -75,7 +63,7 @@ else{
 <body class="bg-gray-200 flex items-center justify-center ">
 
   <form  method="POST" action="verify.php" class="bg-white w-800 h-auto p-6 rounded-lg shadow-md flex flex-col gap- items-center flex flex-cols gap-8 justify-evenly">
-      
+
       <label class="text-lg font-semibold">
         Check your inbox
       </label>
