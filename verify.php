@@ -5,11 +5,11 @@ require 'vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-
+/* 1️⃣ Generate + send OTP ONLY ONCE */
 if (!isset($_SESSION["otp"])) {
 
     $otp = random_int(10000, 99999);
-    $otp;
+    $_SESSION["otp"] = $otp;
 
     $mail = new PHPMailer(true);
 
@@ -18,7 +18,7 @@ if (!isset($_SESSION["otp"])) {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = "abderrahimghmouch47@gmail.com";
-        $mail->Password = "neie yupe szud vjim"; // 
+        $mail->Password = "neie yupe szud vjim"; // ⚠️ move to env later
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
@@ -36,11 +36,12 @@ if (!isset($_SESSION["otp"])) {
     }
 }
 
+/* 2️⃣ Verify OTP ONLY when form is submitted */
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $otpsent = $_POST["validotp"] ?? '';
+    $otprecive = $_POST["validotp"] ?? '';
 
-    if ($otpsent == $otp) {
+    if ($otprecive == $_SESSION["otp"]) {
         unset($_SESSION["otp"]); // destroy OTP
         header("Location: index.php");
         exit();
@@ -49,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8">
